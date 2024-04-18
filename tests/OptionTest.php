@@ -274,6 +274,10 @@ class OptionTest extends TestCase
 
         self::assertEquals(some(some(23)), $opt4->flatten());
         self::assertEquals(some(23), $opt4->flatten()->flatten());
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot flatten a non-Option value.');
+        $opt4->flatten()->flatten()->flatten();
     }
 
     public function testClone(): void
