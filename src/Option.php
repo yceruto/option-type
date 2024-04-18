@@ -184,11 +184,11 @@ final readonly class Option
      *
      * @template U
      *
-     * @param \Closure(): U $fn
+     * @param callable(): U $fn
      *
      * @return T|U
      */
-    public function unwrapOrElse(\Closure $fn): mixed
+    public function unwrapOrElse(callable $fn): mixed
     {
         return $this->value ?? $fn();
     }
@@ -199,11 +199,11 @@ final readonly class Option
      *
      * @template U
      *
-     * @param \Closure(T): U $fn
+     * @param callable(T): U $fn
      *
      * @return self<null>|self<U>
      */
-    public function map(\Closure $fn): self
+    public function map(callable $fn): self
     {
         if ($this->isNone()) {
             return self::none();
@@ -231,12 +231,12 @@ final readonly class Option
      *
      * @template U
      *
-     * @param \Closure(T): U $fn
+     * @param callable(T): U $fn
      * @param U $default
      *
      * @return T|U
      */
-    public function mapOr(\Closure $fn, mixed $default): mixed
+    public function mapOr(callable $fn, mixed $default): mixed
     {
         if ($this->isNone()) {
             return $default;
@@ -260,12 +260,12 @@ final readonly class Option
      *
      * @template U
      *
-     * @param \Closure(T): U $fn
-     * @param \Closure(): U $default
+     * @param callable(T): U $fn
+     * @param callable(): U $default
      *
      * @return U
      */
-    public function mapOrElse(\Closure $fn, \Closure $default): mixed
+    public function mapOrElse(callable $fn, callable $default): mixed
     {
         if ($this->isNone()) {
             return $default();
@@ -320,11 +320,11 @@ final readonly class Option
      * assert($x->orElse(fn () => $y)->isNone(), 'Expected $x to be None.');
      * ```
      *
-     * @param \Closure(): self<T> $fn A closure that returns an Option
+     * @param callable(): self<T> $fn A closure that returns an Option
      *
      * @return self<T>
      */
-    public function orElse(\Closure $fn): self
+    public function orElse(callable $fn): self
     {
         return $this->isSome() ? $this : $fn();
     }
@@ -402,11 +402,11 @@ final readonly class Option
      *
      * @template U
      *
-     * @param \Closure(T): self<U> $fn
+     * @param callable(T): self<U> $fn
      *
      * @return self<null>|self<U>
      */
-    public function andThen(\Closure $fn): self
+    public function andThen(callable $fn): self
     {
         if ($this->isNone()) {
             return self::none();
@@ -457,11 +457,11 @@ final readonly class Option
      * assert(Option::Some(2)->filter($isEven)->isSome(), 'Expected to be true.');
      * ```
      *
-     * @param \Closure(T): bool $predicate A closure that returns a boolean
+     * @param callable(T): bool $predicate A closure that returns a boolean
      *
      * @return self<T>|self<null>
      */
-    public function filter(\Closure $predicate): Option
+    public function filter(callable $predicate): Option
     {
         if ($this->isNone() || $predicate($this->value)) {
             return $this;
