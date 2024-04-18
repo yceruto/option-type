@@ -1,8 +1,8 @@
 <?php
 
-namespace Type;
+namespace Std\Type;
 
-use function Type\Option\some;
+use function Std\Type\Option\some;
 
 /**
  * The Option type represents an optional value: every Option
@@ -153,10 +153,10 @@ final readonly class Option
      * <b>Examples</b>
      * ```
      * $x = Option::Some(2);
-     * assert(2 === $x->unwrapOrElse(fn() => 1), 'Expected $x to be 2.');
+     * assert(2 === $x->unwrapOrElse(fn () => 1), 'Expected $x to be 2.');
      *
      * $x = Option::None();
-     * assert(1 === $x->unwrapOrElse(fn() => 1), 'Expected $x to be 1.');
+     * assert(1 === $x->unwrapOrElse(fn () => 1), 'Expected $x to be 1.');
      * ```
      *
      * @template U
@@ -200,10 +200,10 @@ final readonly class Option
      * <b>Examples</b>
      * ```
      * $x = Option::Some(2);
-     * assert(4 === $x->mapOr(fn($value) => $value * 2, 0), 'Expected $x to be 4.');
+     * assert(4 === $x->mapOr(fn ($value) => $value * 2, 0), 'Expected $x to be 4.');
      *
      * $x = Option::None();
-     * assert(0 === $x->mapOr(fn($value) => $value * 2, 0), 'Expected $x to be 0.');
+     * assert(0 === $x->mapOr(fn ($value) => $value * 2, 0), 'Expected $x to be 0.');
      * ```
      *
      * @template U
@@ -229,10 +229,10 @@ final readonly class Option
      * <b>Examples</b>
      * ```
      * $x = Option::Some(2);
-     * assert(4 === $x->mapOrElse(fn($value) => $value * 2, fn() => 0), 'Expected $x to be 4.');
+     * assert(4 === $x->mapOrElse(fn ($value) => $value * 2, fn () => 0), 'Expected $x to be 4.');
      *
      * $x = Option::None();
-     * assert(0 === $x->mapOrElse(fn($value) => $value * 2, fn() => 0), 'Expected $x to be 0.');
+     * assert(0 === $x->mapOrElse(fn ($value) => $value * 2, fn () => 0), 'Expected $x to be 0.');
      * ```
      *
      * @template U
@@ -286,15 +286,15 @@ final readonly class Option
      * ```
      * $x = Option::Some(2);
      * $y = Option::Some(3);
-     * assert($x->orElse(fn() => $y)->isSome(), 'Expected $x to be Some.');
+     * assert($x->orElse(fn () => $y)->isSome(), 'Expected $x to be Some.');
      *
      * $x = Option::None();
      * $y = Option::Some(3);
-     * assert($x->orElse(fn() => $y)->isSome(), 'Expected $x to be Some.');
+     * assert($x->orElse(fn () => $y)->isSome(), 'Expected $x to be Some.');
      *
      * $x = Option::None();
      * $y = Option::None();
-     * assert($x->orElse(fn() => $y)->isNone(), 'Expected $x to be None.');
+     * assert($x->orElse(fn () => $y)->isNone(), 'Expected $x to be None.');
      * ```
      *
      * @param \Closure(): self<T> $fn A closure that returns an Option
@@ -369,11 +369,11 @@ final readonly class Option
      * <b>Examples</b>
      * ```
      * $x = Option::Some(2);
-     * $y = $x->andThen(fn($value) => Option::Some($value * 2));
+     * $y = $x->andThen(fn ($value) => Option::Some($value * 2));
      * assert(4 === $y->unwrap(), 'Expected $y to be 4.');
      *
      * $x = Option::None();
-     * $y = $x->andThen(fn($value) => Option::Some($value * 2));
+     * $y = $x->andThen(fn ($value) => Option::Some($value * 2));
      * assert($y->isNone(), 'Expected $y to be None.');
      * ```
      *

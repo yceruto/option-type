@@ -1,13 +1,13 @@
 <?php
 
-namespace Type\Tests;
+namespace Std\Type\Tests;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Type\Option;
+use Std\Type\Option;
 
-use function Type\Option\some;
-use function Type\Option\none;
+use function Std\Type\Option\some;
+use function Std\Type\Option\none;
 
 #[CoversClass(Option::class)]
 class OptionTest extends TestCase

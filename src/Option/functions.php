@@ -1,8 +1,8 @@
 <?php
 
-namespace Type\Option;
+namespace Std\Type\Option;
 
-use Type\Option;
+use Std\Type\Option;
 
 if (!\function_exists('some')) {
     /**

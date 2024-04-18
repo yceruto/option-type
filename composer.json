@@ -11,13 +11,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Type\\": "src/"
+            "Std\\Type\\": "src/"
         },
         "files": ["src/Option/functions.php"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Type\\Tests\\": "tests/"
+            "Std\\Type\\Tests\\": "tests/"
         }
     },
     "require": {
