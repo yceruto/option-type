@@ -235,7 +235,7 @@ final readonly class Option
     public function map(callable $fn): self
     {
         if ($this->isNone()) {
-            return self::none();
+            return $this;
         }
 
         if (null === $value = $fn($this->value)) {
@@ -409,7 +409,7 @@ final readonly class Option
      */
     public function and(self $option): self
     {
-        return $this->isSome() ? $option : self::none();
+        return $this->isSome() ? $option : $this;
     }
 
     /**
@@ -438,7 +438,7 @@ final readonly class Option
     public function andThen(callable $fn): self
     {
         if ($this->isNone()) {
-            return self::none();
+            return $this;
         }
 
         return $fn($this->value);
@@ -479,10 +479,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $isEven = fn ($value) => 0 === $value % 2;
+     * $isEven = fn (int $value): bool => 0 === $value % 2;
      *
-     * assert(none(->filter($isEven)->isSome(), 'Expected to be false.');
-     * assert(some(3)->filter($isEven)->isNone(), 'Expected to be false.');
+     * assert(none()->filter($isEven)->isNone(), 'Expected to be true.');
+     * assert(some(3)->filter($isEven)->isNone(), 'Expected to be true.');
      * assert(some(2)->filter($isEven)->isSome(), 'Expected to be true.');
      * ```
      *
@@ -549,7 +549,7 @@ final readonly class Option
     public function flatten(): self
     {
         if ($this->isNone()) {
-            return self::none();
+            return $this;
         }
 
         if ($this->value instanceof self) {
