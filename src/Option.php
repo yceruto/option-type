@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Option Type package.
+ *
+ * (c) Yonel Ceruto <patch@yceruto.dev>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Std\Type;
 
 use function Std\Type\Option\some;
@@ -19,7 +30,7 @@ final readonly class Option
      *
      * @param T $value A value of type T
      *
-     * @return self<T>
+     * @return self<T> Some Option
      */
     public static function some(mixed $value): self
     {
@@ -35,7 +46,7 @@ final readonly class Option
      *
      * Also see {@see none()} for a shorter way to create a Some Option.
      *
-     * @return self<null>
+     * @return self<null> None Option
      */
     public static function none(): self
     {
@@ -58,7 +69,7 @@ final readonly class Option
      *
      * @param T $value A value of type T
      *
-     * @return self<T>|self<null>
+     * @return self<T>|self<null> Some or None Option
      */
     public static function from(mixed $value): self
     {
@@ -76,6 +87,8 @@ final readonly class Option
      * $x = none();
      * assert(!$x->isSome(), 'Expected $x not to be Some.');
      * ```
+     *
+     * @return bool `true` if the option is a {@see some} value, otherwise `false`
      */
     public function isSome(): bool
     {
@@ -93,6 +106,8 @@ final readonly class Option
      * $x = none();
      * assert($x->isNone(), 'Expected $x to be None.');
      * ```
+     *
+     * @return bool `true` if the option is a {@see none} value, otherwise `false`
      */
     public function isNone(): bool
     {
@@ -111,11 +126,13 @@ final readonly class Option
      * $x->expect('A number.'); // throws LogicException
      * ```
      *
+     * @param string $message A custom error message to use in the LogicException
+     *
      * @return T The contained value
      *
      * @throws \LogicException If the value is a {@see none} with a custom error message provided.
-     *                           We recommend that `expect()` messages are used to describe the reason
-     *                           you expect the `Option` should be {@see some}.
+     *                         We recommend that `expect()` messages are used to describe the reason
+     *                         you expect the `Option` should be {@see some}.
      */
     public function expect(string $message): mixed
     {
@@ -138,9 +155,9 @@ final readonly class Option
      * $x->unwrap(); // throws LogicException
      * ```
      *
-     * @return T
+     * @return T The contained value
      *
-     * @throws \LogicException
+     * @throws \LogicException If the value is a {@see none}
      */
     public function unwrap(): mixed
     {
@@ -165,9 +182,9 @@ final readonly class Option
      *
      * @template U of T
      *
-     * @param U $default
+     * @param U $default A default value of type T
      *
-     * @return T|U
+     * @return T|U The contained value or the default
      */
     public function unwrapOr(mixed $default): mixed
     {
@@ -188,9 +205,9 @@ final readonly class Option
      *
      * @template U
      *
-     * @param callable(): U $fn
+     * @param callable(): U $fn A callable that returns a value of type U
      *
-     * @return T|U
+     * @return T|U The contained value or the result of the callable
      */
     public function unwrapOrElse(callable $fn): mixed
     {
@@ -209,9 +226,9 @@ final readonly class Option
      * $x->unwrapOrThrow(new UnknownNumberError()); // throws LogicException
      * ```
      *
-     * @return T
+     * @return T The contained value
      *
-     * @throws \Throwable
+     * @throws \Throwable If the value is a {@see none}
      */
     public function unwrapOrThrow(\Throwable $error): mixed
     {
@@ -228,9 +245,9 @@ final readonly class Option
      *
      * @template U
      *
-     * @param callable(T): U $fn
+     * @param callable(T): U $fn A callable that returns a value of type U
      *
-     * @return self<null>|self<U>
+     * @return self<null>|self<U> The mapped Option
      */
     public function map(callable $fn): self
     {
@@ -260,10 +277,10 @@ final readonly class Option
      *
      * @template U
      *
-     * @param callable(T): U $fn
-     * @param U $default
+     * @param callable(T): U $fn      A callable that returns a value of type U
+     * @param U              $default A default value of type U
      *
-     * @return T|U
+     * @return T|U The contained value or the default
      */
     public function mapOr(callable $fn, mixed $default): mixed
     {
@@ -289,10 +306,10 @@ final readonly class Option
      *
      * @template U
      *
-     * @param callable(T): U $fn
-     * @param callable(): U $default
+     * @param callable(T): U $fn      A callable that returns a value of type U
+     * @param callable(): U  $default A callable that returns a default value of type U
      *
-     * @return U
+     * @return U The result of the callable
      */
     public function mapOrElse(callable $fn, callable $default): mixed
     {
@@ -323,7 +340,7 @@ final readonly class Option
      *
      * @param self<T> $option The option to return if the original is {@see none}
      *
-     * @return self<T>
+     * @return self<T> The original option if it contains a value, otherwise `$option`
      */
     public function or(self $option): self
     {
@@ -349,9 +366,9 @@ final readonly class Option
      * assert($x->orElse(fn () => $y)->isNone(), 'Expected $x to be None.');
      * ```
      *
-     * @param callable(): self<T> $fn A closure that returns an Option
+     * @param callable(): self<T> $fn A callable that returns an Option
      *
-     * @return self<T>
+     * @return self<T> The original option if it contains a value, otherwise the result of the callable
      */
     public function orElse(callable $fn): self
     {
@@ -359,7 +376,7 @@ final readonly class Option
     }
 
     /**
-     * Returns {@see some} if exactly one of `self`, `$option` is {@see some}, otherwise returns {@see none}.
+     * Returns {@see some} if exactly one of `$this`, `$option` is {@see some}, otherwise returns {@see none}.
      *
      * <b>Examples</b>
      * ```
@@ -405,7 +422,7 @@ final readonly class Option
      *
      * @param self<T> $option The option to compare with
      *
-     * @return self<T>|self<null>
+     * @return self<T>|self<null> `$option` if the original is {@see none}, otherwise the original option
      */
     public function and(self $option): self
     {
@@ -429,9 +446,9 @@ final readonly class Option
      *
      * @template U
      *
-     * @param callable(T): self<U> $fn
+     * @param callable(T): self<U> $fn A callable that returns an Option
      *
-     * @return self<null>|self<U>
+     * @return self<null>|self<U> The result of the callable
      */
     public function andThen(callable $fn): self
     {
@@ -456,7 +473,7 @@ final readonly class Option
      * assert([] === iterator_to_array($x->iterate()), 'Expected to be [].');
      * ```
      *
-     * @return \ArrayIterator<int|string, T>
+     * @return \ArrayIterator<int|string, T> An iterator over the possibly contained value
      */
     public function iterate(): \ArrayIterator
     {
@@ -484,13 +501,13 @@ final readonly class Option
      * assert(some(2)->filter($isEven)->isSome(), 'Expected to be true.');
      * ```
      *
-     * @param callable(T): bool $predicate A closure that returns a boolean
+     * @param callable(T): bool $predicate A callable that returns a boolean
      *
-     * @return self<T>|self<null>
+     * @return self<T>|self<null> {@see some} if it's {@see some} option and the predicate is `true`, otherwise {@see none}
      */
     public function filter(callable $predicate): Option
     {
-        if ($this->isNone() || $predicate($this->value)) {
+        if ($this->isSome() && $predicate($this->value)) {
             return $this;
         }
 
@@ -498,7 +515,7 @@ final readonly class Option
     }
 
     /**
-     * Returns `true` if the `self` value is the same value as `$option`.
+     * Returns `true` if the wrapped value is the same value as `$option`.
      *
      * <b>Examples</b>
      * ```
@@ -516,6 +533,8 @@ final readonly class Option
      * ```
      *
      * @param self<T> $option The option to compare with
+     *
+     * @return bool `true` if the wrapped value is the same value as `$option`, otherwise `false`
      */
     public function equals(self $option): bool
     {
@@ -542,7 +561,9 @@ final readonly class Option
      * assert(some(2) == $x->flatten()->flatten(), 'Expected to be Option<T>.');
      * ```
      *
-     * @return self<null>|self<T>
+     * @return self<null>|self<T> The flattened Option
+     *
+     * @throws \LogicException If the value is not an Option
      */
     public function flatten(): self
     {
@@ -560,7 +581,7 @@ final readonly class Option
     /**
      * Returns a copy of the option.
      *
-     * @return self<T>
+     * @return self<T> A copy of the option
      */
     public function clone(): self
     {
@@ -568,7 +589,7 @@ final readonly class Option
     }
 
     /**
-     * @param T $value
+     * @param T $value A value of type T
      */
     private function __construct(
         private mixed $value,
