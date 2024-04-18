@@ -163,11 +163,11 @@ final readonly class Option
      * assert(1 === $x->unwrapOr(1), 'Expected $x to be 1.');
      * ```
      *
-     * @template TDefault of T
+     * @template U of T
      *
-     * @param TDefault $default
+     * @param U $default
      *
-     * @return T|TDefault
+     * @return T|U
      */
     public function unwrapOr(mixed $default): mixed
     {
