@@ -392,7 +392,7 @@ final readonly class Option
      * ```
      * $x = some(2);
      * $y = some(3);
-     * assert($x->and($y)->isSome(), 'Expected $x to be Some.');
+     * assert($x->and($y)->isSome(), 'Expected $x and $y to be Some.');
      *
      * $x = none();
      * $y = some(3);
@@ -400,7 +400,7 @@ final readonly class Option
      *
      * $x = none();
      * $y = none();
-     * assert($x->and($y)->isNone(), 'Expected $x to be None.');
+     * assert($x->and($y)->isNone(), 'Expected $x and $y to be None.');
      * ```
      *
      * @param self<T> $option The option to compare with
@@ -420,13 +420,11 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = some(2);
-     * $y = $x->andThen(fn ($value) => some($value * 2));
-     * assert(4 === $y->unwrap(), 'Expected $y to be 4.');
+     * $x = some(2)->andThen(fn ($value) => some($value * 2));
+     * assert(4 === $x->unwrap(), 'Expected $x to be 4.');
      *
-     * $x = none();
-     * $y = $x->andThen(fn ($value) => some($value * 2));
-     * assert($y->isNone(), 'Expected $y to be None.');
+     * $x = none()->andThen(fn ($value) => some($value * 2));
+     * assert($x->isNone(), 'Expected $x to be None.');
      * ```
      *
      * @template U

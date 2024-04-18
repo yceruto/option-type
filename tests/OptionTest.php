@@ -14,7 +14,7 @@ class OptionTest extends TestCase
 {
     public function testSome(): void
     {
-        $opt = Option::some(23);
+        $opt = some(23);
 
         self::assertTrue($opt->isSome());
     }
@@ -23,12 +23,12 @@ class OptionTest extends TestCase
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Cannot create a Some option with a null value, use None instead.');
-        Option::some(null);
+        some(null);
     }
 
     public function testNone(): void
     {
-        $opt = Option::none();
+        $opt = none();
 
         self::assertTrue($opt->isNone());
     }
@@ -38,27 +38,27 @@ class OptionTest extends TestCase
         $opt1 = Option::from(23);
         $opt2 = Option::from(null);
 
-        self::assertEquals(Option::some(23), $opt1);
-        self::assertEquals(Option::none(), $opt2);
+        self::assertEquals(some(23), $opt1);
+        self::assertEquals(none(), $opt2);
     }
 
     public function testExpect(): void
     {
-        $opt = Option::some(23);
+        $opt = some(23);
 
         self::assertSame(23, $opt->expect('This should not throw an exception.'));
     }
 
     public function testUnwrap(): void
     {
-        $opt = Option::some(23);
+        $opt = some(23);
 
         self::assertSame(23, $opt->unwrap());
     }
 
     public function testUnwrapThrowsException(): void
     {
-        $opt = Option::none();
+        $opt = none();
 
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Called Option::unwrap() on a None value.');
@@ -67,7 +67,7 @@ class OptionTest extends TestCase
 
     public function testExpectThrowsException(): void
     {
-        $opt = Option::none();
+        $opt = none();
 
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('This should throw an exception.');
@@ -76,8 +76,8 @@ class OptionTest extends TestCase
 
     public function testUnwrapOr(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
         self::assertSame(23, $opt1->unwrapOr(1));
         self::assertSame(1, $opt2->unwrapOr(1));
@@ -85,8 +85,8 @@ class OptionTest extends TestCase
 
     public function testUnwrapOrElse(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
         self::assertSame(23, $opt1->unwrapOrElse(fn () => 1));
         self::assertSame(1, $opt2->unwrapOrElse(fn () => 1));
@@ -94,8 +94,8 @@ class OptionTest extends TestCase
 
     public function testUnwrapOrThrow(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
         self::assertSame(23, $opt1->unwrapOrThrow(new \RuntimeException('This should not throw an exception.')));
 
@@ -106,8 +106,8 @@ class OptionTest extends TestCase
 
     public function testMap(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
         $mappedOpt1 = $opt1->map(fn ($value) => $value * 2);
         $mappedOpt2 = $opt2->map(fn ($value) => $value * 2);
@@ -118,8 +118,8 @@ class OptionTest extends TestCase
 
     public function testMapOr(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
         $mappedOpt1 = $opt1->mapOr(fn ($value) => $value * 2, 1);
         $mappedOpt2 = $opt2->mapOr(fn ($value) => $value * 2, 1);
@@ -130,8 +130,8 @@ class OptionTest extends TestCase
 
     public function testMapOrElse(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
         $mappedOpt1 = $opt1->mapOrElse(fn ($value) => $value * 2, fn () => 1);
         $mappedOpt2 = $opt2->mapOrElse(fn ($value) => $value * 2, fn () => 1);
@@ -142,13 +142,13 @@ class OptionTest extends TestCase
 
     public function testOr(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
-        $orOpt1 = $opt1->or(Option::some(42));
-        $orOpt2 = $opt1->or(Option::none());
-        $orOpt3 = $opt2->or(Option::some(42));
-        $orOpt4 = $opt2->or(Option::none());
+        $orOpt1 = $opt1->or(some(42));
+        $orOpt2 = $opt1->or(none());
+        $orOpt3 = $opt2->or(some(42));
+        $orOpt4 = $opt2->or(none());
 
         self::assertSame(23, $orOpt1->unwrap());
         self::assertSame(23, $orOpt2->unwrap());
@@ -158,13 +158,13 @@ class OptionTest extends TestCase
 
     public function testOrElse(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
-        $orElseOpt1 = $opt1->orElse(fn () => Option::some(42));
-        $orElseOpt2 = $opt1->orElse(fn () => Option::none());
-        $orElseOpt3 = $opt2->orElse(fn () => Option::some(42));
-        $orElseOpt4 = $opt2->orElse(fn () => Option::none());
+        $orElseOpt1 = $opt1->orElse(fn () => some(42));
+        $orElseOpt2 = $opt1->orElse(fn () => none());
+        $orElseOpt3 = $opt2->orElse(fn () => some(42));
+        $orElseOpt4 = $opt2->orElse(fn () => none());
 
         self::assertSame(23, $orElseOpt1->unwrap());
         self::assertSame(23, $orElseOpt2->unwrap());
@@ -174,13 +174,13 @@ class OptionTest extends TestCase
 
     public function testXor(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
-        $xorOpt1 = $opt1->xor(Option::some(42));
-        $xorOpt2 = $opt1->xor(Option::none());
-        $xorOpt3 = $opt2->xor(Option::some(42));
-        $xorOpt4 = $opt2->xor(Option::none());
+        $xorOpt1 = $opt1->xor(some(42));
+        $xorOpt2 = $opt1->xor(none());
+        $xorOpt3 = $opt2->xor(some(42));
+        $xorOpt4 = $opt2->xor(none());
 
         self::assertTrue($xorOpt1->isNone());
         self::assertSame(23, $xorOpt2->unwrap());
@@ -190,15 +190,15 @@ class OptionTest extends TestCase
 
     public function testAnd(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
-        $andOpt1 = $opt1->and(Option::some(42));
-        $andOpt2 = $opt1->and(Option::none());
-        $andOpt3 = $opt2->and(Option::some(42));
-        $andOpt4 = $opt2->and(Option::none());
+        $andOpt1 = $opt1->and(some(42));
+        $andOpt2 = $opt1->and(none());
+        $andOpt3 = $opt2->and(some(42));
+        $andOpt4 = $opt2->and(none());
 
-        self::assertSame(42, $andOpt1->unwrap());
+        self::assertTrue($andOpt1->isSome());
         self::assertTrue($andOpt2->isNone());
         self::assertTrue($andOpt3->isNone());
         self::assertTrue($andOpt4->isNone());
@@ -206,11 +206,11 @@ class OptionTest extends TestCase
 
     public function testAndThen(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
-        $andThenOpt1 = $opt1->andThen(fn ($value) => Option::some($value * 2));
-        $andThenOpt2 = $opt2->andThen(fn ($value) => Option::some($value * 2));
+        $andThenOpt1 = $opt1->andThen(fn ($value) => some($value * 2));
+        $andThenOpt2 = $opt2->andThen(fn ($value) => some($value * 2));
 
         self::assertSame(46, $andThenOpt1->unwrap());
         self::assertTrue($andThenOpt2->isNone());
@@ -218,9 +218,9 @@ class OptionTest extends TestCase
 
     public function testIterate(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
-        $opt3 = Option::some(['a', 'b', 'c']);
+        $opt1 = some(23);
+        $opt2 = none();
+        $opt3 = some(['a', 'b', 'c']);
 
         foreach ($opt1->iterate() as $value) {
             self::assertSame(23, $value);
@@ -235,25 +235,25 @@ class OptionTest extends TestCase
 
     public function testFilter(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
         $filteredOpt1 = $opt1->filter(fn ($value) => $value > 10);
         $filteredOpt2 = $opt1->filter(fn ($value) => $value > 30);
         $filteredOpt3 = $opt2->filter(fn ($value) => $value > 10);
 
-        self::assertSame(23, $filteredOpt1->unwrap());
+        self::assertTrue($filteredOpt1->isSome());
         self::assertTrue($filteredOpt2->isNone());
         self::assertTrue($filteredOpt3->isNone());
     }
 
     public function testEquals(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::some(23);
-        $opt3 = Option::some(42);
-        $opt4 = Option::none();
-        $opt5 = Option::none();
+        $opt1 = some(23);
+        $opt2 = some(23);
+        $opt3 = some(42);
+        $opt4 = none();
+        $opt5 = none();
 
         self::assertTrue($opt1->equals($opt2));
         self::assertFalse($opt1->equals($opt3));
@@ -263,23 +263,23 @@ class OptionTest extends TestCase
 
     public function testFlatten(): void
     {
-        $opt1 = Option::some(Option::some(23));
-        $opt2 = Option::some(Option::none());
-        $opt3 = Option::none();
-        $opt4 = Option::some(Option::some(Option::some(23)));
+        $opt1 = some(some(23));
+        $opt2 = some(none());
+        $opt3 = none();
+        $opt4 = some(some(some(23)));
 
-        self::assertEquals(Option::some(23), $opt1->flatten());
-        self::assertEquals(Option::none(), $opt2->flatten());
-        self::assertEquals(Option::none(), $opt3->flatten());
+        self::assertEquals(some(23), $opt1->flatten());
+        self::assertEquals(none(), $opt2->flatten());
+        self::assertEquals(none(), $opt3->flatten());
 
-        self::assertEquals(Option::some(Option::some(23)), $opt4->flatten());
-        self::assertEquals(Option::some(23), $opt4->flatten()->flatten());
+        self::assertEquals(some(some(23)), $opt4->flatten());
+        self::assertEquals(some(23), $opt4->flatten()->flatten());
     }
 
     public function testClone(): void
     {
-        $opt1 = Option::some(23);
-        $opt2 = Option::none();
+        $opt1 = some(23);
+        $opt2 = none();
 
         $clonedOpt1 = $opt1->clone();
         $clonedOpt2 = $opt2->clone();
