@@ -92,6 +92,18 @@ class OptionTest extends TestCase
         self::assertSame(1, $opt2->unwrapOrElse(fn () => 1));
     }
 
+    public function testUnwrapOrThrow(): void
+    {
+        $opt1 = Option::some(23);
+        $opt2 = Option::none();
+
+        self::assertSame(23, $opt1->unwrapOrThrow(new \RuntimeException('This should not throw an exception.')));
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('This should throw an exception.');
+        $opt2->unwrapOrThrow(new \RuntimeException('This should throw an exception.'));
+    }
+
     public function testMap(): void
     {
         $opt1 = Option::some(23);

@@ -198,6 +198,31 @@ final readonly class Option
     }
 
     /**
+     * Returns the contained {@see some} value or throws an exception.
+     *
+     * <b>Examples</b>
+     * ```
+     * $x = some(2);
+     * assert(2 === $x->unwrapOrThrow(), 'Expected $x to be 2.');
+     *
+     * $x = none();
+     * $x->unwrapOrThrow(new UnknownNumberError()); // throws LogicException
+     * ```
+     *
+     * @return T
+     *
+     * @throws \Throwable
+     */
+    public function unwrapOrThrow(\Throwable $error): mixed
+    {
+        if ($this->isNone()) {
+            throw $error;
+        }
+
+        return $this->value;
+    }
+
+    /**
      * Maps an `Option<T>` to `Option<U>` by applying a function to a contained value (if `Some`)
      * or returns `None` (if `None`).
      *
