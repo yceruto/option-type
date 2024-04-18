@@ -2,6 +2,8 @@
 
 namespace Type;
 
+use function Type\Option\some;
+
 /**
  * The Option type represents an optional value: every Option
  * is either Some and contains a value, or None, and does not.
@@ -176,7 +178,7 @@ final readonly class Option
      *
      * @param \Closure(T): U $fn
      *
-     * @return self<U>
+     * @return self<null>|self<U>
      */
     public function map(\Closure $fn): self
     {
@@ -184,7 +186,11 @@ final readonly class Option
             return self::None();
         }
 
-        return self::Some($fn($this->value));
+        if (null === $value = $fn($this->value)) {
+            return self::None();
+        }
+
+        return some($value);
     }
 
     /**
@@ -320,7 +326,7 @@ final readonly class Option
      *
      * @param self<T> $option The option to compare with
      *
-     * @return self<T>
+     * @return self<T>|self<null>
      */
     public function xor(self $option): self
     {
@@ -347,7 +353,7 @@ final readonly class Option
      *
      * @param self<T> $option The option to compare with
      *
-     * @return self<T>
+     * @return self<T>|self<null>
      */
     public function and(self $option): self
     {
@@ -375,7 +381,7 @@ final readonly class Option
      *
      * @param \Closure(T): self<U> $fn
      *
-     * @return self<U>
+     * @return self<null>|self<U>
      */
     public function andThen(\Closure $fn): self
     {
@@ -400,11 +406,12 @@ final readonly class Option
      * assert([] === iterator_to_array($x->iterate()), 'Expected to be [].');
      * ```
      *
-     * @return \ArrayIterator<T>
+     * @return \ArrayIterator<int|string, T>
      */
     public function iterate(): \ArrayIterator
     {
         if ($this->isSome()) {
+            /** @var \ArrayIterator<int|string, T> */
             return new \ArrayIterator((array) $this->value);
         }
 
@@ -429,7 +436,7 @@ final readonly class Option
      *
      * @param \Closure(T): bool $predicate A closure that returns a boolean
      *
-     * @return self<T>
+     * @return self<T>|self<null>
      */
     public function filter(\Closure $predicate): Option
     {
@@ -485,7 +492,7 @@ final readonly class Option
      * assert(Option::Some(2) == $x->flatten()->flatten(), 'Expected to be Option<T>.');
      * ```
      *
-     * @return self<T>
+     * @return self<null>|self<T>
      */
     public function flatten(): self
     {
@@ -493,7 +500,11 @@ final readonly class Option
             return self::None();
         }
 
-        return $this->value;
+        if ($this->value instanceof self) {
+            return $this->value;
+        }
+
+        throw new \LogicException('Cannot flatten a non-Option value.');
     }
 
     /**
@@ -506,6 +517,9 @@ final readonly class Option
         return new self($this->value);
     }
 
+    /**
+     * @param T $value
+     */
     private function __construct(
         private mixed $value,
     ) {

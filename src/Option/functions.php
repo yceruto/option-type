@@ -16,6 +16,7 @@ if (!\function_exists('some')) {
      */
     function some(mixed $value): Option
     {
+        /** @var Option<T> */
         return Option::Some($value);
     }
 }
