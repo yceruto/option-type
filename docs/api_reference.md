@@ -223,12 +223,14 @@ Provides an iterator over the contained value if it is `Some`, otherwise an empt
 
 ```php
 $x = Option::some(2);
-$iterator = $x->iterate();
-echo iterator_to_array($iterator)[0]; // Outputs: 2
+foreach ($x->iterate() as $v) {
+    echo $v; // Outputs: 2
+}
 
 $x = Option::none();
-$iterator = $x->iterate();
-echo count(iterator_to_array($iterator)); // Outputs: 0
+foreach ($x->iterate() as $v) {
+    // 0 iterations
+}
 ```
 
 ### **`filter(callable $predicate): self`**
@@ -237,13 +239,12 @@ Returns `Some` if the option is `Some` and the predicate returns `true`; otherwi
 
 ```php
 $isEven = fn ($x) => $x % 2 === 0;
+
 $x = Option::some(4);
-$filtered = $x->filter($isEven);
-echo $filtered->isSome(); // Outputs: true
+echo $x->filter($isEven)->isSome(); // Outputs: true
 
 $x = Option::some(5);
-$filtered = $x->filter($isEven);
-echo $filtered->isNone(); // Outputs: true
+echo $x->filter($isEven)->isNone(); // Outputs: true
 ```
 
 ### **`equals(self $option): bool`**
@@ -262,9 +263,7 @@ echo $x->equals($y); // Outputs: true
 
 ### **`flatten(): self`**
 
-Converts from `Option<Option<T>>` to `Option<T>`. Useful for unwrapping nested options
-
-.
+Converts from `Option<Option<T>>` to `Option<T>`. Useful for unwrapping nested options.
 
 ```php
 $x = Option::some(Option::some(2));
@@ -284,4 +283,4 @@ $y = $x->clone();
 echo $y->unwrap(); // Outputs: 2
 ```
 
-This documentation provides a comprehensive guide to using the `Option` class effectively for handling optional values in PHP, which can significantly reduce bugs related to null values in your applications.
+See the [examples](examples.md) for more details on how to apply effectively the `Option` type in your PHP code.
