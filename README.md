@@ -50,14 +50,12 @@ function findUser(int $id): Option
 }
 
 // basic usage
-$user = findUser(1)->expect('A user must be found.');
-
-// do something with $user safely
+$user = findUser(1)->expect('user exists.');
+// do something safely with $user instance...
 
 // advanced usage (map the user to a DTO)
 $dto = findUser(1)->mapOr(UserDto::from(...), UserDto::new());
-
-// do something with $dto safely
+// do something safely with $dto instance...
 ```
 
 > [!TIP]
