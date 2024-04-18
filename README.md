@@ -1,4 +1,4 @@
-# An Option type for PHP
+# PHP Option type
 
 [![Latest Stable Version](https://poser.pugx.org/yceruto/option-type/v)](https://packagist.org/packages/yceruto/option-type)
 [![Unstable](http://poser.pugx.org/yceruto/bundle-skeleton/v/unstable)](https://packagist.org/packages/yceruto/option-type)
