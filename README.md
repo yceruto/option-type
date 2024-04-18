@@ -1,9 +1,10 @@
 # Option type
 
-An Option class that represents an optional value. 
+An Option class that represents an optional value. It's about null safety in PHP!
 
 > [!NOTE]
-> Inspired by [Rust's Option type](https://doc.rust-lang.org/std/option/).
+> Inspired by [Rust's Option type](https://doc.rust-lang.org/std/option/) and other 
+> languages like Scala, Swift, F#, etc.
 
 Working with a data type like `Option`, which can explicitly express the absence 
 of a value (similar to `None` in other languages), can significantly enhance the 
