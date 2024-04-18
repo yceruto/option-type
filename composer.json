@@ -1,0 +1,30 @@
+{
+    "name": "yceruto/option-type",
+    "description": "An Option type that represents an optional value",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yonel Ceruto",
+            "email": "patch@yceruto.dev"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Type\\": "src/"
+        },
+        "files": ["src/Option/functions.php"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Type\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.1",
+        "phpstan/phpstan": "^1.10"
+    }
+}
