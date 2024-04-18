@@ -1,6 +1,6 @@
 # Option type
 
-An Option type that represents an optional value. 
+An Option class that represents an optional value. 
 
 > [!NOTE]
 > Inspired by [Rust's Option type](https://doc.rust-lang.org/std/option/).
@@ -19,9 +19,14 @@ composer require yceruto/option-type
 
 ## Usage
 
+Class `Option` represents an optional value: every `Option` is either Some and 
+contains a value, or None, and does not.
+
 ```php
 use App\Model\User;
 use Std\Type\Option;
+
+use function Std\Type\Option\none;
 use function Std\Type\Option\some;
 
 /**
