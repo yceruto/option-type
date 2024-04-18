@@ -23,39 +23,38 @@ It’s a game-changer!
 composer require yceruto/option-type
 ```
 
-## Usage
+## Usage (Handling the presence or absence of a value)
 
-Class `Option` represents an optional value: every `Option` is either Some and 
-contains a value, or None, and does not.
+Options are commonly paired with pattern matching to query the presence of a value
+and take action, always accounting for the `None` case.
 
 ```php
-use App\Model\User;
 use Std\Type\Option;
-
 use function Std\Type\Option\none;
 use function Std\Type\Option\some;
 
 /**
- * @return Option<User>
+ * @return Option<int>
  */
-function findUser(int $id): Option
+function divide(int $dividend, int $divisor): Option
 {
-    $user = // get user from database by $id ... it can return null
-    
-    if (null === $user) {
+    if (0 === $divisor) {
         return none();
     }
 
-    return some($user);
+    return some(intdiv($dividend, $divisor));
 }
 
-// basic usage
-$user = findUser(1)->expect('user exists.');
-// do something safely with $user instance...
+// The return value of the function is an Option
+$result = divide(10, 2);
 
-// advanced usage (map the user to a DTO)
-$dto = findUser(1)->mapOr(UserDto::from(...), UserDto::new());
-// do something safely with $dto instance...
+// Pattern match to retrieve the value
+echo $result->match(
+    // The division was valid
+    some: fn ($v) => "Result: $v",
+    // The division was invalid
+    none: fn () => 'Division by zero!',
+);
 ```
 
 > [!TIP]

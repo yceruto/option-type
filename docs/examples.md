@@ -4,24 +4,32 @@ This section provides examples of how to use the `Option` type in your PHP code.
 
 ## Example 1: Handling the presence or absence of a value
 
-The following example demonstrates how to use the `Option` type to handle the presence or absence of a value safely.
-
 ```php
+use App\Model\User;
 use Std\Type\Option;
+
 use function Std\Type\Option\none;
 use function Std\Type\Option\some;
 
 /**
- * @return Option<int>
+ * @return Option<User>
  */
-function divide(int $dividend, int $divisor): Option
+function findUser(int $id): Option
 {
-    if (0 === $divisor) {
+    $user = // get user from database by $id ... it can return null
+    
+    if (null === $user) {
         return none();
     }
 
-    return some(intdiv($dividend, $divisor));
+    return some($user);
 }
 
-$result = divide(10, 2)->expect('10 divided by 2.');
+// basic usage
+$user = findUser(1)->expect('user exists.');
+// do something safely with $user instance...
+
+// advanced usage (map the user to a DTO)
+$dto = findUser(1)->mapOr(UserDto::from(...), UserDto::new());
+// do something safely with $dto instance...
 ```
