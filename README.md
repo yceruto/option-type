@@ -1,6 +1,7 @@
 # An Option type for PHP
 
 [![Latest Stable Version](https://poser.pugx.org/yceruto/option-type/v)](https://packagist.org/packages/yceruto/option-type)
+[![Unstable](http://poser.pugx.org/yceruto/bundle-skeleton/v/unstable)](https://packagist.org/packages/yceruto/option-type)
 [![License](https://poser.pugx.org/yceruto/option-type/license)](https://packagist.org/packages/yceruto/option-type)
 [![PHP Version Require](https://poser.pugx.org/yceruto/option-type/require/php)](https://packagist.org/packages/yceruto/option-type)
 
