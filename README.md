@@ -66,7 +66,8 @@ $dto = findUser(1)->mapOr(UserDto::from(...), UserDto::new());
 
 ## Documentation
 
-[TODO]
+ * [API Reference](docs/api_reference.md)
+ * [Examples](docs/examples.md)
 
 ## License
 
