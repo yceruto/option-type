@@ -33,6 +33,15 @@ class OptionTest extends TestCase
         self::assertTrue($opt->isNone());
     }
 
+    public function testFrom(): void
+    {
+        $opt1 = Option::from(23);
+        $opt2 = Option::from(null);
+
+        self::assertEquals(Option::some(23), $opt1);
+        self::assertEquals(Option::none(), $opt2);
+    }
+
     public function testExpect(): void
     {
         $opt = Option::some(23);

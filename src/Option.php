@@ -39,6 +39,29 @@ final readonly class Option
     }
 
     /**
+     * Returns an `Option` with the specified value.
+     *
+     * If the value is `null`, returns `None`, otherwise returns `Some`.
+     *
+     * <b>Examples</b>
+     * ```
+     * $x = Option::from(2);
+     * assert($x->isSome(), 'Expected $x to be Some.');
+     *
+     * $x = Option::from(null);
+     * assert($x->isNone(), 'Expected $x to be None.');
+     * ```
+     *
+     * @param T $value A value of type T
+     *
+     * @return self<T>|self<null>
+     */
+    public static function from(mixed $value): self
+    {
+        return null === $value ? self::none() : self::some($value);
+    }
+
+    /**
      * Returns `true` if the option is a {@see some} value.
      *
      * <b>Examples</b>
