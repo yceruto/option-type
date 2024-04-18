@@ -15,6 +15,8 @@ final readonly class Option
     /**
      * Some value.
      *
+     * Also see {@see some()} for a shorter way to create a Some Option.
+     *
      * @param T $value A value of type T
      *
      * @return self<T>
@@ -30,6 +32,8 @@ final readonly class Option
 
     /**
      * No value.
+     *
+     * Also see {@see none()} for a shorter way to create a Some Option.
      *
      * @return self<null>
      */
@@ -66,10 +70,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
+     * $x = some(2);
      * assert($x->isSome(), 'Expected $x to be Some.');
      *
-     * $x = Option::None();
+     * $x = none();
      * assert(!$x->isSome(), 'Expected $x not to be Some.');
      * ```
      */
@@ -83,10 +87,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
+     * $x = some(2);
      * assert(!$x->isNone(), 'Expected $x not to be None.');
      *
-     * $x = Option::None();
+     * $x = none();
      * assert($x->isNone(), 'Expected $x to be None.');
      * ```
      */
@@ -100,10 +104,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
+     * $x = some(2);
      * assert(2 === $x->expect('A number.'), 'Expected $x to be 2.');
      *
-     * $x = Option::None();
+     * $x = none();
      * $x->expect('A number.'); // throws LogicException
      * ```
      *
@@ -127,10 +131,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
+     * $x = some(2);
      * assert(2 === $x->unwrap(), 'Expected $x to be 2.');
      *
-     * $x = Option::None();
+     * $x = none();
      * $x->unwrap(); // throws LogicException
      * ```
      *
@@ -152,10 +156,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
+     * $x = some(2);
      * assert(2 === $x->unwrapOr(1), 'Expected $x to be 2.');
      *
-     * $x = Option::None();
+     * $x = none();
      * assert(1 === $x->unwrapOr(1), 'Expected $x to be 1.');
      * ```
      *
@@ -175,10 +179,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
+     * $x = some(2);
      * assert(2 === $x->unwrapOrElse(fn () => 1), 'Expected $x to be 2.');
      *
-     * $x = Option::None();
+     * $x = none();
      * assert(1 === $x->unwrapOrElse(fn () => 1), 'Expected $x to be 1.');
      * ```
      *
@@ -222,10 +226,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
+     * $x = some(2);
      * assert(4 === $x->mapOr(fn ($value) => $value * 2, 0), 'Expected $x to be 4.');
      *
-     * $x = Option::None();
+     * $x = none();
      * assert(0 === $x->mapOr(fn ($value) => $value * 2, 0), 'Expected $x to be 0.');
      * ```
      *
@@ -251,10 +255,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
+     * $x = some(2);
      * assert(4 === $x->mapOrElse(fn ($value) => $value * 2, fn () => 0), 'Expected $x to be 4.');
      *
-     * $x = Option::None();
+     * $x = none();
      * assert(0 === $x->mapOrElse(fn ($value) => $value * 2, fn () => 0), 'Expected $x to be 0.');
      * ```
      *
@@ -279,16 +283,16 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
-     * $y = Option::Some(3);
+     * $x = some(2);
+     * $y = some(3);
      * assert($x->or($y)->isSome(), 'Expected $x to be Some.');
      *
-     * $x = Option::None();
-     * $y = Option::Some(3);
+     * $x = none();
+     * $y = some(3);
      * assert($x->or($y)->isSome(), 'Expected $x to be Some.');
      *
-     * $x = Option::None();
-     * $y = Option::None();
+     * $x = none();
+     * $y = none();
      * assert($x->or($y)->isNone(), 'Expected $x to be None.');
      * ```
      *
@@ -307,16 +311,16 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
-     * $y = Option::Some(3);
+     * $x = some(2);
+     * $y = some(3);
      * assert($x->orElse(fn () => $y)->isSome(), 'Expected $x to be Some.');
      *
-     * $x = Option::None();
-     * $y = Option::Some(3);
+     * $x = none();
+     * $y = some(3);
      * assert($x->orElse(fn () => $y)->isSome(), 'Expected $x to be Some.');
      *
-     * $x = Option::None();
-     * $y = Option::None();
+     * $x = none();
+     * $y = none();
      * assert($x->orElse(fn () => $y)->isNone(), 'Expected $x to be None.');
      * ```
      *
@@ -334,16 +338,16 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
-     * $y = Option::Some(3);
+     * $x = some(2);
+     * $y = some(3);
      * assert($x->xor($y)->isNone(), 'Expected $x to be None.');
      *
-     * $x = Option::None();
-     * $y = Option::Some(3);
+     * $x = none();
+     * $y = some(3);
      * assert($x->xor($y)->isSome(), 'Expected $x to be Some.');
      *
-     * $x = Option::None();
-     * $y = Option::None();
+     * $x = none();
+     * $y = none();
      * assert($x->xor($y)->isNone(), 'Expected $x to be None.');
      * ```
      *
@@ -361,16 +365,16 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
-     * $y = Option::Some(3);
+     * $x = some(2);
+     * $y = some(3);
      * assert($x->and($y)->isSome(), 'Expected $x to be Some.');
      *
-     * $x = Option::None();
-     * $y = Option::Some(3);
+     * $x = none();
+     * $y = some(3);
      * assert($x->and($y)->isNone(), 'Expected $x to be None.');
      *
-     * $x = Option::None();
-     * $y = Option::None();
+     * $x = none();
+     * $y = none();
      * assert($x->and($y)->isNone(), 'Expected $x to be None.');
      * ```
      *
@@ -391,12 +395,12 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
-     * $y = $x->andThen(fn ($value) => Option::Some($value * 2));
+     * $x = some(2);
+     * $y = $x->andThen(fn ($value) => some($value * 2));
      * assert(4 === $y->unwrap(), 'Expected $y to be 4.');
      *
-     * $x = Option::None();
-     * $y = $x->andThen(fn ($value) => Option::Some($value * 2));
+     * $x = none();
+     * $y = $x->andThen(fn ($value) => some($value * 2));
      * assert($y->isNone(), 'Expected $y to be None.');
      * ```
      *
@@ -422,10 +426,10 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
+     * $x = some(2);
      * assert([2] === iterator_to_array($x->iterate()), 'Expected to be [2].');
      *
-     * $x = Option::None();
+     * $x = none();
      * assert([] === iterator_to_array($x->iterate()), 'Expected to be [].');
      * ```
      *
@@ -452,9 +456,9 @@ final readonly class Option
      * ```
      * $isEven = fn ($value) => 0 === $value % 2;
      *
-     * assert(Option::None()->filter($isEven)->isSome(), 'Expected to be false.');
-     * assert(Option::Some(3)->filter($isEven)->isNone(), 'Expected to be false.');
-     * assert(Option::Some(2)->filter($isEven)->isSome(), 'Expected to be true.');
+     * assert(none(->filter($isEven)->isSome(), 'Expected to be false.');
+     * assert(some(3)->filter($isEven)->isNone(), 'Expected to be false.');
+     * assert(some(2)->filter($isEven)->isSome(), 'Expected to be true.');
      * ```
      *
      * @param callable(T): bool $predicate A closure that returns a boolean
@@ -475,16 +479,16 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(2);
-     * $y = Option::Some(2);
+     * $x = some(2);
+     * $y = some(2);
      * assert($x->equals($y), 'Expected $x to be equal to $y.');
      *
-     * $x = Option::Some(2);
-     * $y = Option::Some(3);
+     * $x = some(2);
+     * $y = some(3);
      * assert(!$x->equals($y), 'Expected $x not to be equal to $y.');
      *
-     * $x = Option::None();
-     * $y = Option::None();
+     * $x = none();
+     * $y = none();
      * assert($x->equals($y), 'Expected $x to be equal to $y.');
      * ```
      *
@@ -500,19 +504,19 @@ final readonly class Option
      *
      * <b>Examples</b>
      * ```
-     * $x = Option::Some(Option::Some(2));
+     * $x = some(some(2));
      * assert(2 === $x->flatten()->unwrap(), 'Expected to be 2.');
      *
-     * $x = Option::Some(Option::None());
+     * $x = some(none());
      * assert($x->flatten()->isNone(), 'Expected to be None.');
      *
-     * $x = Option::None();
+     * $x = none();
      * assert($x->flatten()->isNone(), 'Expected to be None.');
      *
      * # Flattening only removes one level of nesting at a time:
-     * $x = Option::Some(Option::Some(Option::Some(2)));
-     * assert(Option::Some(Option::Some(2)) == $x->flatten(), 'Expected to be Option<Option<T>>.');
-     * assert(Option::Some(2) == $x->flatten()->flatten(), 'Expected to be Option<T>.');
+     * $x = some(some(some(2)));
+     * assert(some(some(2)) == $x->flatten(), 'Expected to be Option<Option<T>>.');
+     * assert(some(2) == $x->flatten()->flatten(), 'Expected to be Option<T>.');
      * ```
      *
      * @return self<null>|self<T>
