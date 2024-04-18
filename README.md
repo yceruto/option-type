@@ -1,4 +1,4 @@
-# Option type
+# An Option type for PHP
 
 An Option class that represents an optional value. It's about null safety in PHP!
 
