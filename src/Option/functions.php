@@ -17,7 +17,7 @@ if (!\function_exists('some')) {
     function some(mixed $value): Option
     {
         /** @var Option<T> */
-        return Option::Some($value);
+        return Option::some($value);
     }
 }
 
@@ -29,7 +29,7 @@ if (!\function_exists('none')) {
      */
     function none(): Option
     {
-        return Option::None();
+        return Option::none();
     }
 }
 

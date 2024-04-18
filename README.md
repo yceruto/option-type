@@ -54,6 +54,10 @@ $dto = findUser(1)->mapOr(UserDto::from(...), UserDto::new());
 // do something with $dto safely
 ```
 
+> [!TIP]
+>The functions `some()` and `none()` are shortcuts to create an `Option` instance with a
+>value, same as `Option::some()`, or without a value, same as `Option::none()`, respectively.
+
 ## Documentation
 
 [TODO]

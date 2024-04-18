@@ -19,7 +19,7 @@ final readonly class Option
      *
      * @return self<T>
      */
-    public static function Some(mixed $value): self
+    public static function some(mixed $value): self
     {
         if (null === $value) {
             throw new \LogicException('Cannot create a Some option with a null value, use None instead.');
@@ -33,13 +33,13 @@ final readonly class Option
      *
      * @return self<null>
      */
-    public static function None(): self
+    public static function none(): self
     {
         return new self(null);
     }
 
     /**
-     * Returns `true` if the option is a {@see Some} value.
+     * Returns `true` if the option is a {@see some} value.
      *
      * <b>Examples</b>
      * ```
@@ -56,7 +56,7 @@ final readonly class Option
     }
 
     /**
-     * Returns `true` if the option is a {@see None} value.
+     * Returns `true` if the option is a {@see none} value.
      *
      * <b>Examples</b>
      * ```
@@ -73,7 +73,7 @@ final readonly class Option
     }
 
     /**
-     * Returns the contained {@see Some} value, or throws an exception with custom message if the value is a {@see None}.
+     * Returns the contained {@see some} value, or throws an exception with custom message if the value is a {@see none}.
      *
      * <b>Examples</b>
      * ```
@@ -86,9 +86,9 @@ final readonly class Option
      *
      * @return T The contained value
      *
-     * @throws \LogicException If the value is a {@see None} with a custom error message provided.
+     * @throws \LogicException If the value is a {@see none} with a custom error message provided.
      *                           We recommend that `expect()` messages are used to describe the reason
-     *                           you expect the `Option` should be {@see Some}.
+     *                           you expect the `Option` should be {@see some}.
      */
     public function expect(string $message): mixed
     {
@@ -100,7 +100,7 @@ final readonly class Option
     }
 
     /**
-     * Returns the contained {@see Some} value, or throws an exception if the value is a {@see None}.
+     * Returns the contained {@see some} value, or throws an exception if the value is a {@see none}.
      *
      * <b>Examples</b>
      * ```
@@ -125,7 +125,7 @@ final readonly class Option
     }
 
     /**
-     * Returns the contained {@see Some} value or a provided default.
+     * Returns the contained {@see some} value or a provided default.
      *
      * <b>Examples</b>
      * ```
@@ -148,7 +148,7 @@ final readonly class Option
     }
 
     /**
-     * Returns the contained {@see Some} value or computes it from a closure.
+     * Returns the contained {@see some} value or computes it from a closure.
      *
      * <b>Examples</b>
      * ```
@@ -183,11 +183,11 @@ final readonly class Option
     public function map(\Closure $fn): self
     {
         if ($this->isNone()) {
-            return self::None();
+            return self::none();
         }
 
         if (null === $value = $fn($this->value)) {
-            return self::None();
+            return self::none();
         }
 
         return some($value);
@@ -269,7 +269,7 @@ final readonly class Option
      * assert($x->or($y)->isNone(), 'Expected $x to be None.');
      * ```
      *
-     * @param self<T> $option The option to return if the original is {@see None}
+     * @param self<T> $option The option to return if the original is {@see none}
      *
      * @return self<T>
      */
@@ -307,7 +307,7 @@ final readonly class Option
     }
 
     /**
-     * Returns {@see Some} if exactly one of `self`, `$option` is {@see Some}, otherwise returns {@see None}.
+     * Returns {@see some} if exactly one of `self`, `$option` is {@see some}, otherwise returns {@see none}.
      *
      * <b>Examples</b>
      * ```
@@ -330,11 +330,11 @@ final readonly class Option
      */
     public function xor(self $option): self
     {
-        return $this->isSome() !== $option->isSome() ? $this->or($option) : self::None();
+        return $this->isSome() !== $option->isSome() ? $this->or($option) : self::none();
     }
 
     /**
-     * Returns {@see None} if the option is {@see None}, otherwise returns `$option`.
+     * Returns {@see none} if the option is {@see none}, otherwise returns `$option`.
      *
      * <b>Examples</b>
      * ```
@@ -357,11 +357,11 @@ final readonly class Option
      */
     public function and(self $option): self
     {
-        return $this->isSome() ? $option : self::None();
+        return $this->isSome() ? $option : self::none();
     }
 
     /**
-     * Returns {@see None} if the Option is {@see None}, otherwise calls `$fn` with
+     * Returns {@see none} if the Option is {@see none}, otherwise calls `$fn` with
      * the wrapped value and returns the result.
      *
      * Some languages call this method flatmap.
@@ -386,7 +386,7 @@ final readonly class Option
     public function andThen(\Closure $fn): self
     {
         if ($this->isNone()) {
-            return self::None();
+            return self::none();
         }
 
         return $fn($this->value);
@@ -419,11 +419,11 @@ final readonly class Option
     }
 
     /**
-     * Returns {@see None} if the Option is {@see None}, otherwise calls `$predicate`
+     * Returns {@see none} if the Option is {@see none}, otherwise calls `$predicate`
      * with the wrapped value and returns:
      *
-     * - {@see Some}(v) If `$predicate` returns `true` (where `v` is the wrapped value), and
-     * - {@see None} if `$predicate` returns `false`.
+     * - {@see some}(v) If `$predicate` returns `true` (where `v` is the wrapped value), and
+     * - {@see none} if `$predicate` returns `false`.
      *
      * <b>Examples</b>
      * ```
@@ -444,7 +444,7 @@ final readonly class Option
             return $this;
         }
 
-        return self::None();
+        return self::none();
     }
 
     /**
@@ -497,7 +497,7 @@ final readonly class Option
     public function flatten(): self
     {
         if ($this->isNone()) {
-            return self::None();
+            return self::none();
         }
 
         if ($this->value instanceof self) {
