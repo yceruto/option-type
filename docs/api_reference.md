@@ -52,6 +52,24 @@ $opt = Option::none();
 echo $opt->isNone(); // Outputs: true
 ```
 
+### **`match(callable $some, callable $none): mixed`**
+
+Applies a function to the contained value if it is `Some`, otherwise applies another function.
+
+```php
+$x = Option::some(2);
+echo $x->match(
+    some: fn ($v) => $v * 2, 
+    none: fn () => 0,
+); // Outputs: 4
+
+$x = Option::none();
+echo $x->match(
+    some: fn ($v) => $v * 2, 
+    none: fn () => 0,
+); // Outputs: 0
+```
+
 ### **`expect(string $message): mixed`**
 
 Returns the contained value if it is `Some`; otherwise, throws a `LogicException` with a custom message.

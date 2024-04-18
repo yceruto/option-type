@@ -115,6 +115,23 @@ final readonly class Option
     }
 
     /**
+     * Matches the option with the provided callables and returns the result.
+     *
+     * @template U
+     * @template V
+     *
+     * @param callable(T): U $some A callable that returns a value of type U
+     * @param callable(): V  $none A callable that returns a value of type V
+     *
+     * @return U|V The result of the callable `$some` function if the option is {@see some},
+     *             otherwise the result of the callable `$none` function
+     */
+    public function match(callable $some, callable $none): mixed
+    {
+        return $this->isSome() ? $some($this->value) : $none();
+    }
+
+    /**
      * Returns the contained {@see some} value, or throws an exception with custom message if the value is a {@see none}.
      *
      * <b>Examples</b>
@@ -515,7 +532,7 @@ final readonly class Option
     }
 
     /**
-     * Returns `true` if the wrapped value is the same value as `$option`.
+     * Compares the option with the provided option and returns `true` if they are equal.
      *
      * <b>Examples</b>
      * ```

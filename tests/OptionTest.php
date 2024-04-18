@@ -280,6 +280,25 @@ class OptionTest extends TestCase
         $opt4->flatten()->flatten()->flatten();
     }
 
+    public function testMatch(): void
+    {
+        $opt1 = some(23);
+        $opt2 = none();
+
+        $result1 = $opt1->match(
+            some: fn ($value) => $value * 2,
+            none: fn () => 0,
+        );
+
+        $result2 = $opt2->match(
+            some: fn ($value) => $value * 2,
+            none: fn () => 0,
+        );
+
+        self::assertSame(46, $result1);
+        self::assertSame(0, $result2);
+    }
+
     public function testClone(): void
     {
         $opt1 = some(23);

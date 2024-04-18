@@ -20,8 +20,8 @@ function divide(int $dividend, int $divisor): Option
         return none();
     }
 
-    return some($dividend / $divisor);
+    return some(intdiv($dividend, $divisor));
 }
 
-$result = divide(10, 2)->expect('divisor must be greater than zero.');
+$result = divide(10, 2)->expect('10 divided by 2.');
 ```
