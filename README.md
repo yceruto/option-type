@@ -1,6 +1,6 @@
 # PHP Option type
 
-[![Latest Stable Version](https://poser.pugx.org/yceruto/option-type/v)](https://packagist.org/packages/yceruto/option-type)
+[![Latest Stable Version](https://poser.pugx.org/yceruto/option-type/v?v=1)](https://packagist.org/packages/yceruto/option-type)
 [![Unstable](http://poser.pugx.org/yceruto/bundle-skeleton/v/unstable)](https://packagist.org/packages/yceruto/option-type)
 [![License](https://poser.pugx.org/yceruto/option-type/license)](https://packagist.org/packages/yceruto/option-type)
 [![PHP Version Require](https://poser.pugx.org/yceruto/option-type/require/php)](https://packagist.org/packages/yceruto/option-type)
@@ -23,7 +23,7 @@ It’s a game-changer!
 composer require yceruto/option-type
 ```
 
-## Usage (Handling the presence or absence of a value)
+## Handling the presence or absence of a value
 
 Options are commonly paired with pattern matching to query the presence of a value
 and take action, always accounting for the `None` case.
