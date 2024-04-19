@@ -65,7 +65,6 @@ echo $result->match(
 
  * [API Reference](docs/api_reference.md)
  * [Examples](docs/examples.md)
- * [Counter-Examples](docs/counter-examples.md)
 
 ## License
 
