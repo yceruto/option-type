@@ -2,14 +2,15 @@
 
 This section provides examples of how to use the `Option` type in your PHP code.
 
-## Example 1: Handling the presence or absence of a value
+## Example 1: Handling the presence or absence of a value in return types
+
+Let's say you have a function that retrieves a user from a database by its ID. The 
+function can return `null` if the user is not found. Instead of returning `null`, 
+you can use the `Option` type to explicitly handle the presence or absence of the user.
 
 ```php
 use App\Model\User;
 use Std\Type\Option;
-
-use function Std\Type\Option\none;
-use function Std\Type\Option\some;
 
 /**
  * @return Option<User>
@@ -17,19 +18,14 @@ use function Std\Type\Option\some;
 function findUser(int $id): Option
 {
     $user = // get user from database by $id ... it can return null
-    
-    if (null === $user) {
-        return none();
-    }
 
-    return some($user);
+    return Option::from($user); // None if null, otherwise Some($user)
 }
 
-// basic usage
 $user = findUser(1)->expect('user exists.');
 // do something safely with $user instance...
 
-// advanced usage (map the user to a DTO)
+// map the user found to a DTO or create a new one if not found
 $dto = findUser(1)->mapOr(UserDto::from(...), UserDto::new());
 // do something safely with $dto instance...
 ```
