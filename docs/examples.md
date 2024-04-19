@@ -29,3 +29,27 @@ $user = findUser(1)->expect('the user exists.'); // throws LogicException if it 
 $dto = findUser(1)->mapOr(UserDto::from(...), UserDto::new());
 // do something safely with $dto instance...
 ```
+
+## Example 2: Handling the presence or absence of a value in a function argument
+
+You can also use the `Option` type to handle the presence or absence of a value in a function argument.
+
+```php
+use Std\Type\Option;
+
+/**
+ * @param Option<User> $user
+ */
+function greet(Option $user): string
+{
+    return $user->match(
+        some: fn (User $u) => "Hello, {$u->name()}!",
+        none: fn () => 'Hello, World!',
+    );
+}
+
+$user = new User(name: 'Alice');
+
+echo greet(some($user)); // Outputs: Hello, Alice!
+echo greet(none()); // Outputs: Hello, World!
+```
