@@ -479,8 +479,6 @@ final readonly class Option
     /**
      * Returns an iterator over the possibly contained value.
      *
-     * The iterator yields the values if the `Option` is a `Some`, otherwise none.
-     *
      * <b>Examples</b>
      * ```
      * $x = some(2);
@@ -490,16 +488,11 @@ final readonly class Option
      * assert([] === iterator_to_array($x->iterate()), 'Expected to be [].');
      * ```
      *
-     * @return \ArrayIterator<int|string, T> An iterator over the possibly contained value
+     * @return iterable<T> An iterator over the possibly contained value
      */
-    public function iterate(): \ArrayIterator
+    public function iterate(): iterable
     {
-        if ($this->isSome()) {
-            /** @var \ArrayIterator<int|string, T> */
-            return new \ArrayIterator((array) $this->value);
-        }
-
-        return new \ArrayIterator();
+        return new \ArrayIterator((array) $this->value);
     }
 
     /**
