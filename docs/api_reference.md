@@ -79,7 +79,7 @@ $opt = Option::some(10);
 echo $opt->expect('A number.'); // Outputs: 10
 
 $opt = Option::none();
-echo $opt->expect('A number.'); // Throws LogicException
+echo $opt->expect('A number.'); // Throws LogicException with custom message
 ```
 
 ### **`unwrap(): mixed`**
@@ -299,6 +299,28 @@ Creates a copy of the option. Useful for preserving immutability when needed.
 $x = Option::some(2);
 $y = $x->clone();
 echo $y->unwrap(); // Outputs: 2
+```
+
+## Shortcut Functions
+
+### **`some(mixed $value): Option`**
+
+Creates an `Option` instance containing a non-null value. If `null` is passed, a `LogicException` is thrown.
+
+```php
+$opt = some(10); // Same as Option::some(10)
+echo $opt->unwrap(); // Outputs: 10
+
+some(null); // Throws LogicException
+```
+
+### **`none(): Option`**
+
+Creates an `Option` instance representing the absence of a value (i.e., `None`).
+
+```php
+$opt = none(); // Same as Option::none()
+echo $opt->isNone(); // Outputs: true
 ```
 
 See the [examples](examples.md) for more details on how to apply effectively the `Option` type in your PHP code.
