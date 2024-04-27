@@ -5,17 +5,16 @@
 [![License](https://poser.pugx.org/yceruto/option-type/license)](https://packagist.org/packages/yceruto/option-type)
 [![PHP Version Require](https://poser.pugx.org/yceruto/option-type/require/php)](https://packagist.org/packages/yceruto/option-type)
 
-An Option class that represents an optional value. It's about null safety in PHP!
+The `Option` class represents a value that might or might not be there—it’s all about 
+making sure you handle `null` safely in PHP!
 
 > [!NOTE]
 > Inspired by [Rust's Option type](https://doc.rust-lang.org/std/option/) and other 
 > languages like Scala, Swift, F#, etc.
 
-Working with a data type like `Option`, which can explicitly express the absence 
-of a value (similar to `None` in other languages), can significantly enhance the 
-safety and ease of handling `null` values in PHP! 
-
-It’s a game-changer!
+Using a data type like `Option`, which clearly shows when there’s no value (similar to 
+`None` in other languages), can really boost the safety and simplicity of managing `null` 
+values in PHP. It’s a game-changer!
 
 ## Installation
 
@@ -25,8 +24,8 @@ composer require yceruto/option-type
 
 ## Handling the presence or absence of a value
 
-Options are commonly paired with pattern matching to query the presence of a value
-and take action, always accounting for the `None` case.
+Options often work with pattern matching to check if there’s a value and act accordingly, 
+always making sure to handle the `None` case.
 
 ```php
 use Std\Type\Option;
@@ -58,8 +57,9 @@ echo $result->match(
 ```
 
 > [!TIP]
->Use functions `some()` and `none()` as shortcuts to create an `Option` instance with a
->value, same as `Option::some()`, or without a value, same as `Option::none()`, respectively.
+>You can use the functions `some()` and `none()` as quick ways to create an `Option` 
+>instance. `some()` is just like `Option::some()`, meaning it includes a value, while 
+>`none()` is the same as `Option::none()`, indicating it's empty.
 
 ## Documentation
 
