@@ -5,16 +5,12 @@
 [![License](https://poser.pugx.org/yceruto/option-type/license)](https://packagist.org/packages/yceruto/option-type)
 [![PHP Version Require](https://poser.pugx.org/yceruto/option-type/require/php)](https://packagist.org/packages/yceruto/option-type)
 
-The `Option` class represents a value that might or might not be there—it’s all about 
-making sure you handle `null` safely in PHP!
+The `Option` class represents a value that might or might not be there. It's all about
+null safety in PHP!
 
 > [!NOTE]
 > Inspired by [Rust's Option type](https://doc.rust-lang.org/std/option/) and other 
 > languages like Scala, Swift, F#, etc.
-
-Using a data type like `Option`, which clearly shows when there’s no value (similar to 
-`None` in other languages), can really boost the safety and simplicity of managing `null` 
-values in PHP. It’s a game-changer!
 
 ## Installation
 
@@ -22,7 +18,42 @@ values in PHP. It’s a game-changer!
 composer require yceruto/option-type
 ```
 
-## Handling the presence or absence of a value
+## Handling the presence or absence of a value with `null`
+
+In PHP, denoting the absence of a value is done with `null`, e.g. when a `divide`
+function returns `null` if the divisor is `0`.
+
+```php
+/**
+ * @return int|null
+ */
+function divide(int $dividend, int $divisor): ?int
+{
+    if (0 === $divisor) {
+        return null;
+    }
+
+    return intdiv($dividend, $divisor);
+}
+
+function success(int $result): string {
+    return sprintf('Result: %d', $result);
+}
+
+$result = divide(10, 2);
+
+echo success($result);
+```
+
+Can you spot the issue in this code? Apparently, everything is fine until you try to
+divide by zero. The function will return `null`, and the `success()` function will throw
+a `TypeError` because it expects an `int` value, not `null`.
+
+The issue with this approach is that it's too easy to overlook checking if the value is 
+`null`, leading to runtime errors. This is where the `Option` class comes in handy: it 
+makes you deal with the possibility of a missing value, the `null` case.
+
+## Handling the presence or absence of a value with `Option`
 
 Options often work with pattern matching to check if there’s a value and act accordingly, 
 always making sure to handle the `None` case.
@@ -44,13 +75,17 @@ function divide(int $dividend, int $divisor): Option
     return some(intdiv($dividend, $divisor));
 }
 
+function success(int $result): string {
+    return sprintf('Result: %d', $result);
+}
+
 // The return value of the function is an Option
 $result = divide(10, 2);
 
 // Pattern match to retrieve the value
 echo $result->match(
     // The division was valid
-    some: fn ($v) => "Result: $v",
+    some: fn (int $v) => success($v),
     // The division was invalid
     none: fn () => 'Division by zero!',
 );
