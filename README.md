@@ -5,7 +5,7 @@
 [![License](https://poser.pugx.org/yceruto/option-type/license)](https://packagist.org/packages/yceruto/option-type)
 [![PHP Version Require](https://poser.pugx.org/yceruto/option-type/require/php)](https://packagist.org/packages/yceruto/option-type)
 
-The `Option` class represents a value that might or might not be there. It's all about
+The `Option` type represents a value that might or might not be there. It's all about
 null safety in PHP!
 
 > [!NOTE]
@@ -24,9 +24,6 @@ In PHP, denoting the absence of a value is done with `null`, e.g. when a `divide
 function returns `null` if the divisor is `0`.
 
 ```php
-/**
- * @return int|null
- */
 function divide(int $dividend, int $divisor): ?int
 {
     if (0 === $divisor) {
@@ -50,13 +47,13 @@ divide by zero. The function will return `null`, and the `success()` function wi
 a `TypeError` because it expects an `int` value, not `null`.
 
 The issue with this approach is that it's too easy to overlook checking if the value is 
-`null`, leading to runtime errors. This is where the `Option` class comes in handy: it 
-makes you deal with the possibility of a missing value, the `null` case.
+`null`, leading to runtime errors, and this is where the `Option` type comes in handy: it 
+always forces you to deal with the `null` case.
 
 ## Handling the presence or absence of a value with `Option`
 
 Options often work with pattern matching to check if there’s a value and act accordingly, 
-always making sure to handle the `None` case.
+always making sure to handle the `null` case.
 
 ```php
 use Std\Type\Option;
