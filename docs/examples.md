@@ -22,7 +22,7 @@ function findUser(int $id): Option
     return Option::from($user); // None if null, otherwise Some($user)
 }
 
-$user = findUser(1)->expect('the user exists.'); // throws LogicException if it does not exist
+$user = findUser(1)->expect('A user must exist!'); // throws LogicOptionException if it does not exist
 // do something safely with $user instance...
 
 // map the user found to a DTO or create a new one if not found

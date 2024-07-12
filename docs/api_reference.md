@@ -44,13 +44,13 @@ _Table of Contents:_
 
 ### **`Option::some(mixed $value): self`**
 
-Creates an `Option` instance containing a non-null value. If `null` is passed, a `LogicException` is thrown.
+Creates an `Option` instance containing a non-null value. If `null` is passed, a `LogicOptionException` is thrown.
 
 ```php
 $opt = Option::some(10);
 echo $opt->unwrap(); // Outputs: 10
 
-Option::some(null); // Throws LogicException
+Option::some(null); // Throws LogicOptionException
 ```
 
 ### **`Option::none(): self`**
@@ -107,26 +107,26 @@ echo $opt->isNone(); // Outputs: true
 
 ### **`Option::expect(string $message): mixed`**
 
-Returns the contained value if it is `Some`; otherwise, throws a `LogicException` with a custom message.
+Returns the contained value if it is `Some`; otherwise, throws a `RuntimeOptionException` with a custom message.
 
 ```php
 $opt = Option::some(10);
 echo $opt->expect('A number.'); // Outputs: 10
 
 $opt = Option::none();
-echo $opt->expect('A number.'); // Throws LogicException with custom message
+echo $opt->expect('A number.'); // Throws RuntimeOptionException with custom message
 ```
 
 ### **`Option::unwrap(): mixed`**
 
-Returns the contained value if it is `Some`; otherwise, throws a `LogicException`.
+Returns the contained value if it is `Some`; otherwise, throws a `RuntimeOptionException`.
 
 ```php
 $opt = Option::some(10);
 echo $opt->unwrap(); // Outputs: 10
 
 $opt = Option::none();
-echo $opt->unwrap(); // Throws LogicException
+echo $opt->unwrap(); // Throws RuntimeOptionException
 ```
 
 ### **`Option::unwrapOr(mixed $default): mixed`**
@@ -356,13 +356,13 @@ echo $x->equals($y); // Outputs: true
 
 ### **`some(mixed $value): Option`**
 
-Creates an `Option` instance containing a non-null value. If `null` is passed, a `LogicException` is thrown.
+Creates an `Option` instance containing a non-null value. If `null` is passed, a `LogicOptionException` is thrown.
 
 ```php
 $opt = some(10); // Same as Option::some(10)
 echo $opt->unwrap(); // Outputs: 10
 
-some(null); // Throws LogicException
+some(null); // Throws LogicOptionException
 ```
 
 ### **`none(): Option`**

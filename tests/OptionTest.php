@@ -4,6 +4,8 @@ namespace Std\Type\Tests;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Std\Type\Exception\LogicOptionException;
+use Std\Type\Exception\RuntimeOptionException;
 use Std\Type\Option;
 
 use function Std\Type\Option\some;
@@ -22,7 +24,7 @@ class OptionTest extends TestCase
     public function testInvalidSome(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Cannot create a Some option with a null value, use None instead.');
+        $this->expectExceptionMessage('Cannot create Std\Type\Option::some() option with a null value, use Std\Type\Option::none() instead.');
         some(null);
     }
 
@@ -60,8 +62,8 @@ class OptionTest extends TestCase
     {
         $opt = none();
 
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Called Option::unwrap() on a None value.');
+        $this->expectException(RuntimeOptionException::class);
+        $this->expectExceptionMessage('Calling Std\Type\Option::unwrap() method on a None value. Check Std\Type\Option::isNone() first or use a fallback method instead.');
         $opt->unwrap();
     }
 
@@ -69,7 +71,7 @@ class OptionTest extends TestCase
     {
         $opt = none();
 
-        $this->expectException(\LogicException::class);
+        $this->expectException(RuntimeOptionException::class);
         $this->expectExceptionMessage('This should throw an exception.');
         $opt->expect('This should throw an exception.');
     }
@@ -276,7 +278,7 @@ class OptionTest extends TestCase
         self::assertEquals(some(23), $opt4->flatten()->flatten());
 
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Cannot flatten a non-Option value.');
+        $this->expectExceptionMessage('Calling Std\Type\Option::flatten() method on a non-Option value. Unexpected "int" type.');
         $opt4->flatten()->flatten()->flatten();
     }
 

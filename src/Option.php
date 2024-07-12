@@ -5,13 +5,16 @@ declare(strict_types=1);
 /*
  * This file is part of Option Type package.
  *
- * (c) Yonel Ceruto <patch@yceruto.dev>
+ * (c) Yonel Ceruto <open@yceruto.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 namespace Std\Type;
+
+use Std\Type\Exception\LogicOptionException;
+use Std\Type\Exception\RuntimeOptionException;
 
 use function Std\Type\Option\some;
 
@@ -21,7 +24,7 @@ use function Std\Type\Option\some;
  *
  * @template T
  */
-final readonly class Option
+readonly class Option
 {
     /**
      * Some value.
@@ -30,15 +33,15 @@ final readonly class Option
      *
      * @param T $value A value of type T
      *
-     * @return self<T> Some Option
+     * @return static Some Option
      */
-    public static function some(mixed $value): self
+    public static function some(mixed $value): static
     {
         if (null === $value) {
-            throw new \LogicException('Cannot create a Some option with a null value, use None instead.');
+            throw new LogicOptionException(sprintf('Cannot create %s() option with a null value, use %s() instead.', static::class.'::some', static::class.'::none'));
         }
 
-        return new self($value);
+        return new static($value);
     }
 
     /**
@@ -46,11 +49,11 @@ final readonly class Option
      *
      * Also see {@see none()} for a shorter way to create a Some Option.
      *
-     * @return self<null> None Option
+     * @return static None Option
      */
-    public static function none(): self
+    public static function none(): static
     {
-        return new self(null);
+        return new static(null);
     }
 
     /**
@@ -69,11 +72,11 @@ final readonly class Option
      *
      * @param T $value A value of type T
      *
-     * @return self<T>|self<null> Some or None Option
+     * @return static Some or None Option
      */
-    public static function from(mixed $value): self
+    public static function from(mixed $value): static
     {
-        return null === $value ? self::none() : self::some($value);
+        return null === $value ? static::none() : static::some($value);
     }
 
     /**
@@ -96,7 +99,7 @@ final readonly class Option
     }
 
     /**
-     * Returns `true` if the option is a {@see none} value.
+     * Returns `true` if the option is {@see none} value.
      *
      * <b>Examples</b>
      * ```
@@ -107,7 +110,7 @@ final readonly class Option
      * assert($x->isNone(), 'Expected $x to be None.');
      * ```
      *
-     * @return bool `true` if the option is a {@see none} value, otherwise `false`
+     * @return bool `true` if the option is {@see none} value, otherwise `false`
      */
     public function isNone(): bool
     {
@@ -132,36 +135,36 @@ final readonly class Option
     }
 
     /**
-     * Returns the contained {@see some} value, or throws an exception with custom message if the value is a {@see none}.
+     * Returns the contained {@see some} value, or throws an exception with custom message if the value is {@see none}.
      *
      * <b>Examples</b>
      * ```
      * $x = some(2);
-     * assert(2 === $x->expect('A number.'), 'Expected $x to be 2.');
+     * assert(2 === $x->expect('A number must be provided.'), 'Expected $x to be 2.');
      *
      * $x = none();
-     * $x->expect('A number.'); // throws LogicException
+     * $x->expect('A number.'); // throws RuntimeOptionException
      * ```
      *
-     * @param string $message A custom error message to use in the LogicException
+     * @param string $message A custom error message to use in the RuntimeOptionException
      *
      * @return T The contained value
      *
-     * @throws \LogicException If the value is a {@see none} with a custom error message provided.
-     *                         We recommend that `expect()` messages are used to describe the reason
-     *                         you expect the `Option` should be {@see some}.
+     * @throws RuntimeOptionException If the value is {@see none} with a custom error message provided.
+     *                                We recommend that `expect()` messages are used to describe the reason
+     *                                you expect the `Option` should be {@see some}.
      */
     public function expect(string $message): mixed
     {
         if ($this->isNone()) {
-            throw new \LogicException($message);
+            throw new RuntimeOptionException($message);
         }
 
         return $this->value;
     }
 
     /**
-     * Returns the contained {@see some} value, or throws an exception if the value is a {@see none}.
+     * Returns the contained {@see some} value, or throws an exception if the value is {@see none}.
      *
      * <b>Examples</b>
      * ```
@@ -169,17 +172,17 @@ final readonly class Option
      * assert(2 === $x->unwrap(), 'Expected $x to be 2.');
      *
      * $x = none();
-     * $x->unwrap(); // throws LogicException
+     * $x->unwrap(); // throws LogicOptionException
      * ```
      *
      * @return T The contained value
      *
-     * @throws \LogicException If the value is a {@see none}
+     * @throws RuntimeOptionException If the value is {@see none}
      */
     public function unwrap(): mixed
     {
         if ($this->isNone()) {
-            throw new \LogicException('Called Option::unwrap() on a None value.');
+            throw new RuntimeOptionException(sprintf('Calling %s() method on a None value. Check %s() first or use a fallback method instead.', static::class.'::unwrap', static::class.'::isNone'));
         }
 
         return $this->value;
@@ -240,12 +243,12 @@ final readonly class Option
      * assert(2 === $x->unwrapOrThrow(), 'Expected $x to be 2.');
      *
      * $x = none();
-     * $x->unwrapOrThrow(new UnknownNumberError()); // throws LogicException
+     * $x->unwrapOrThrow(new UnknownNumberError()); // throws UnknownNumberError
      * ```
      *
      * @return T The contained value
      *
-     * @throws \Throwable If the value is a {@see none}
+     * @throws \Throwable If the value is {@see none}
      */
     public function unwrapOrThrow(\Throwable $error): mixed
     {
@@ -573,7 +576,7 @@ final readonly class Option
      *
      * @return self<null>|self<T> The flattened Option
      *
-     * @throws \LogicException If the value is not an Option
+     * @throws LogicOptionException If the value is not an Option
      */
     public function flatten(): self
     {
@@ -585,7 +588,7 @@ final readonly class Option
             return $this->value;
         }
 
-        throw new \LogicException('Cannot flatten a non-Option value.');
+        throw new LogicOptionException(sprintf('Calling %s() method on a non-Option value. Unexpected "%s" type.', static::class.'::flatten', get_debug_type($this->value)));
     }
 
     /**
@@ -601,7 +604,7 @@ final readonly class Option
     /**
      * @param T $value A value of type T
      */
-    private function __construct(
+    final private function __construct(
         private mixed $value,
     ) {
     }
