@@ -42,33 +42,33 @@ _Table of Contents:_
 
 ## Creating an `Option`
 
-### **`Option::some(mixed $value): self`**
+### **`Some(mixed $value)`**
 
 Creates an `Option` instance containing a non-null value. If `null` is passed, a `LogicOptionException` is thrown.
 
 ```php
-$opt = Option::some(10);
+$opt = new Some(10);
 echo $opt->unwrap(); // Outputs: 10
 
-Option::some(null); // Throws LogicOptionException
+new Some(null); // Throws LogicOptionException
 ```
 
-### **`Option::none(): self`**
+### **`None()`**
 
 Creates an `Option` instance representing the absence of a value (i.e., `None`).
 
 ```php
-$opt = Option::none();
+$opt = new None();
 echo $opt->isNone(); // Outputs: true
 ```
 
-### **`Option::from(mixed $value): self`**
+### **`OptionFactory::from(mixed $value): Option`**
 
 Converts a value to an `Option`, making it `None` if the original value is `null`, otherwise `Some`.
 
 ```php
-$some = Option::from(5);
-$none = Option::from(null);
+$some = OptionFactory::from(5);
+$none = OptionFactory::from(null);
 echo $some->isSome(); // Outputs: true
 echo $none->isNone(); // Outputs: true
 ```
@@ -78,7 +78,7 @@ echo $none->isNone(); // Outputs: true
 Creates a copy of the option. Useful for preserving immutability when needed.
 
 ```php
-$x = Option::some(2);
+$x = new Some(2);
 $y = $x->clone();
 echo $y->unwrap(); // Outputs: 2
 ```
@@ -90,7 +90,7 @@ echo $y->unwrap(); // Outputs: 2
 Checks if the option is a `Some` value.
 
 ```php
-$opt = Option::some(10);
+$opt = new Some(10);
 echo $opt->isSome(); // Outputs: true
 ```
 
@@ -99,7 +99,7 @@ echo $opt->isSome(); // Outputs: true
 Checks if the option is a `None` value.
 
 ```php
-$opt = Option::none();
+$opt = new None();
 echo $opt->isNone(); // Outputs: true
 ```
 
@@ -110,10 +110,10 @@ echo $opt->isNone(); // Outputs: true
 Returns the contained value if it is `Some`; otherwise, throws a `RuntimeOptionException` with a custom message.
 
 ```php
-$opt = Option::some(10);
+$opt = new Some(10);
 echo $opt->expect('A number.'); // Outputs: 10
 
-$opt = Option::none();
+$opt = new None();
 echo $opt->expect('A number.'); // Throws RuntimeOptionException with custom message
 ```
 
@@ -122,10 +122,10 @@ echo $opt->expect('A number.'); // Throws RuntimeOptionException with custom mes
 Returns the contained value if it is `Some`; otherwise, throws a `RuntimeOptionException`.
 
 ```php
-$opt = Option::some(10);
+$opt = new Some(10);
 echo $opt->unwrap(); // Outputs: 10
 
-$opt = Option::none();
+$opt = new None();
 echo $opt->unwrap(); // Throws RuntimeOptionException
 ```
 
@@ -134,10 +134,10 @@ echo $opt->unwrap(); // Throws RuntimeOptionException
 Returns the contained value if it is `Some`; otherwise, returns a provided default value.
 
 ```php
-$opt = Option::some(10);
+$opt = new Some(10);
 echo $opt->unwrapOr(5); // Outputs: 10
 
-$opt = Option::none();
+$opt = new None();
 echo $opt->unwrapOr(5); // Outputs: 5
 ```
 
@@ -146,10 +146,10 @@ echo $opt->unwrapOr(5); // Outputs: 5
 Returns the contained value if it is `Some`; otherwise, computes a value using a provided callable.
 
 ```php
-$opt = Option::some(10);
+$opt = new Some(10);
 echo $opt->unwrapOrElse(fn () => 5); // Outputs: 10
 
-$opt = Option::none();
+$opt = new None();
 echo $opt->unwrapOrElse(fn () => 5); // Outputs: 5
 ```
 
@@ -158,10 +158,10 @@ echo $opt->unwrapOrElse(fn () => 5); // Outputs: 5
 Returns the contained value if it is `Some`; otherwise, throws the provided throwable error.
 
 ```php
-$opt = Option::some(10);
+$opt = new Some(10);
 echo $opt->unwrapOrThrow(new \Exception("No value!")); // Outputs: 10
 
-$opt = Option::none();
+$opt = new None();
 echo $opt->unwrapOrThrow(new \Exception("No value!")); // Throws Exception
 ```
 
@@ -170,10 +170,10 @@ echo $opt->unwrapOrThrow(new \Exception("No value!")); // Throws Exception
 Converts from `Option<Option<T>>` to `Option<T>`. Useful for unwrapping nested options.
 
 ```php
-$x = Option::some(Option::some(2));
+$x = new Some(new Some(2));
 echo $x->flatten()->unwrap(); // Outputs: 2
 
-$x = Option::some(Option::none());
+$x = new Some(new None());
 echo $x->flatten()->isNone(); // Outputs: true
 ```
 
@@ -184,13 +184,13 @@ echo $x->flatten()->isNone(); // Outputs: true
 Applies a function to the contained value if it is `Some`, otherwise applies another function.
 
 ```php
-$x = Option::some(2);
+$x = new Some(2);
 echo $x->match(
     some: fn ($v) => $v * 2, 
     none: fn () => 0,
 ); // Outputs: 4
 
-$x = Option::none();
+$x = new None();
 echo $x->match(
     some: fn ($v) => $v * 2, 
     none: fn () => 0,
@@ -202,11 +202,11 @@ echo $x->match(
 Transforms the contained value by applying a function if it is `Some`; returns `None` if it is `None`.
 
 ```php
-$opt = Option::some(5);
+$opt = new Some(5);
 $result = $opt->map(fn ($x) => $x * 2);
 echo $result->unwrap(); // Outputs: 10
 
-$opt = Option::none();
+$opt = new None();
 $result = $opt->map(fn ($x) => $x * 2);
 echo $result->isNone(); // Outputs: true
 ```
@@ -216,10 +216,10 @@ echo $result->isNone(); // Outputs: true
 Applies a function to the contained value if it is `Some`, otherwise returns a default value.
 
 ```php
-$opt = Option::some(5);
+$opt = new Some(5);
 echo $opt->mapOr(fn ($x) => $x * 2, 0); // Outputs: 10
 
-$opt = Option::none();
+$opt = new None();
 echo $opt->mapOr(fn ($x) => $x * 2, 0); // Outputs: 0
 ```
 
@@ -228,10 +228,10 @@ echo $opt->mapOr(fn ($x) => $x * 2, 0); // Outputs: 0
 Applies a function to the contained value if it is `Some`, otherwise computes the default using another callable.
 
 ```php
-$opt = Option::some(5);
+$opt = new Some(5);
 echo $opt->mapOrElse(fn ($x) => $x * 2, fn () => 0); // Outputs: 10
 
-$opt = Option::none();
+$opt = new None();
 echo $opt->mapOrElse(fn ($x) => $x * 2, fn () => 0); // Outputs: 0
 ```
 
@@ -241,12 +241,12 @@ Applies a function to the contained value if it is `Some`, otherwise returns `No
 in other languages.
 
 ```php
-$x = Option::some(2);
-$result = $x->andThen(fn ($value) => Option::some($value * 2));
+$x = new Some(2);
+$result = $x->andThen(fn ($value) => new Some($value * 2));
 echo $result->unwrap(); // Outputs: 4
 
-$x = Option::none();
-$result = $x->andThen(fn ($value) => Option::some($value * 2));
+$x = new None();
+$result = $x->andThen(fn ($value) => new Some($value * 2));
 echo $result->isNone(); // Outputs: true
 ```
 
@@ -257,10 +257,10 @@ Returns `Some` if the option is `Some` and the predicate returns `true`; otherwi
 ```php
 $isEven = fn ($x) => $x % 2 === 0;
 
-$x = Option::some(4);
+$x = new Some(4);
 echo $x->filter($isEven)->isSome(); // Outputs: true
 
-$x = Option::some(5);
+$x = new Some(5);
 echo $x->filter($isEven)->isNone(); // Outputs: true
 ```
 
@@ -271,11 +271,11 @@ echo $x->filter($isEven)->isNone(); // Outputs: true
 Returns the option itself if it is `Some`, otherwise returns the provided option.
 
 ```php
-$x = Option::some(2);
-$y = Option::some(3);
+$x = new Some(2);
+$y = new Some(3);
 echo $x->or($y)->unwrap(); // Outputs: 2
 
-$x = Option::none();
+$x = new None();
 echo $x->or($y)->unwrap(); // Outputs: 3
 ```
 
@@ -284,11 +284,11 @@ echo $x->or($y)->unwrap(); // Outputs: 3
 Returns the option itself if it is `Some`, otherwise calls a callable to provide an option.
 
 ```php
-$x = Option::some(2);
-$y = Option::some(3);
+$x = new Some(2);
+$y = new Some(3);
 echo $x->orElse(fn () => $y)->unwrap(); // Outputs: 2
 
-$x = Option::none();
+$x = new None();
 echo $x->orElse(fn () => $y)->unwrap(); // Outputs: 3
 ```
 
@@ -297,11 +297,11 @@ echo $x->orElse(fn () => $y)->unwrap(); // Outputs: 3
 Returns `Some` if exactly one of the options is `Some`, otherwise returns `None`.
 
 ```php
-$x = Option::some(2);
-$y = Option::some(3);
+$x = new Some(2);
+$y = new Some(3);
 echo $x->xor($y)->isNone(); // Outputs: true
 
-$x = Option::none();
+$x = new None();
 echo $x->xor($y)->unwrap(); // Outputs: 3
 ```
 
@@ -310,11 +310,11 @@ echo $x->xor($y)->unwrap(); // Outputs: 3
 Returns the provided option if the original option is `Some`, otherwise returns `None`.
 
 ```php
-$x = Option::some(2);
-$y = Option::some(3);
+$x = new Some(2);
+$y = new Some(3);
 echo $x->and($y)->unwrap(); // Outputs: 3
 
-$x = Option::none();
+$x = new None();
 echo $x->and($y)->isNone(); // Outputs: true
 ```
 
@@ -325,12 +325,12 @@ echo $x->and($y)->isNone(); // Outputs: true
 Provides an iterator over the contained value if it is `Some`, otherwise an empty iterator.
 
 ```php
-$x = Option::some(2);
+$x = new Some(2);
 foreach ($x->iterate() as $v) {
     echo $v; // Outputs: 2
 }
 
-$x = Option::none();
+$x = new None();
 foreach ($x->iterate() as $v) {
     // 0 iterations
 }
@@ -343,12 +343,12 @@ foreach ($x->iterate() as $v) {
 Compares two options for equality. Returns `true` if both are `None` or if both are `Some` with equal values.
 
 ```php
-$x = Option::some(2);
-$y = Option::some(2);
+$x = new Some(2);
+$y = new Some(2);
 echo $x->equals($y); // Outputs: true
 
-$x = Option::none();
-$y = Option::none();
+$x = new None();
+$y = new None();
 echo $x->equals($y); // Outputs: true
 ```
 
@@ -359,7 +359,7 @@ echo $x->equals($y); // Outputs: true
 Creates an `Option` instance containing a non-null value. If `null` is passed, a `LogicOptionException` is thrown.
 
 ```php
-$opt = some(10); // Same as Option::some(10)
+$opt = some(10); // Same as new Some(10)
 echo $opt->unwrap(); // Outputs: 10
 
 some(null); // Throws LogicOptionException
@@ -370,7 +370,7 @@ some(null); // Throws LogicOptionException
 Creates an `Option` instance representing the absence of a value (i.e., `None`).
 
 ```php
-$opt = none(); // Same as Option::none()
+$opt = none(); // Same as new None()
 echo $opt->isNone(); // Outputs: true
 ```
 

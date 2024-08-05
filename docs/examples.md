@@ -10,7 +10,7 @@ you can use the `Option` type to explicitly handle the presence or absence of th
 
 ```php
 use App\Model\User;
-use Std\Type\Option;
+use Std\Type\OptionFactory;
 
 /**
  * @return Option<User>
@@ -19,7 +19,7 @@ function findUser(int $id): Option
 {
     $user = // get user from database by $id ... it can return null
 
-    return Option::from($user); // None if null, otherwise Some($user)
+    return OptionFactory::from($user); // None if null, otherwise Some($user)
 }
 
 $user = findUser(1)->expect('A user must exist!'); // throws LogicOptionException if it does not exist
@@ -36,6 +36,8 @@ You can also use the `Option` type to handle the presence or absence of a value 
 
 ```php
 use Std\Type\Option;
+use function Std\Type\Option\none;
+use function Std\Type\Option\some;
 
 /**
  * @param Option<User> $user
