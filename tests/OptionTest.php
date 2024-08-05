@@ -2,11 +2,14 @@
 
 namespace Std\Type\Tests;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Std\Type\Exception\LogicOptionException;
 use Std\Type\Exception\RuntimeOptionException;
 use Std\Type\Option;
+
+use Std\Type\OptionFactory;
 
 use function Std\Type\Option\some;
 use function Std\Type\Option\none;
@@ -24,7 +27,7 @@ class OptionTest extends TestCase
     public function testInvalidSome(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Cannot create Std\Type\Option::some() option with a null value, use Std\Type\Option::none() instead.');
+        $this->expectExceptionMessage('Cannot create Std\Type\Some option with a null value, use Std\Type\None instead.');
         some(null);
     }
 
@@ -37,8 +40,8 @@ class OptionTest extends TestCase
 
     public function testFrom(): void
     {
-        $opt1 = Option::from(23);
-        $opt2 = Option::from(null);
+        $opt1 = OptionFactory::from(23);
+        $opt2 = OptionFactory::from(null);
 
         self::assertEquals(some(23), $opt1);
         self::assertEquals(none(), $opt2);
@@ -63,7 +66,7 @@ class OptionTest extends TestCase
         $opt = none();
 
         $this->expectException(RuntimeOptionException::class);
-        $this->expectExceptionMessage('Calling Std\Type\Option::unwrap() method on a None value. Check Std\Type\Option::isNone() first or use a fallback method instead.');
+        $this->expectExceptionMessage('Calling unwrap() method on a Std\Type\None option. Check isNone() method first or use a fallback method instead.');
         $opt->unwrap();
     }
 
@@ -278,7 +281,7 @@ class OptionTest extends TestCase
         self::assertEquals(some(23), $opt4->flatten()->flatten());
 
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Calling Std\Type\Option::flatten() method on a non-Option value. Unexpected "int" type.');
+        $this->expectExceptionMessage('Calling Std\Type\Some::flatten() method on a non-Option value. Unexpected "int" type.');
         $opt4->flatten()->flatten()->flatten();
     }
 

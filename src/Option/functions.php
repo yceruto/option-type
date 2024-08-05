@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Std\Type\Option;
 
-use Std\Type\Option;
+use Std\Type\None;
+use Std\Type\Some;
 
 if (!\function_exists('some')) {
     /**
@@ -23,23 +24,20 @@ if (!\function_exists('some')) {
      *
      * @param T $value A value of type T
      *
-     * @return Option<T> Some option
+     * @return Some<T> Some option
      */
-    function some(mixed $value): Option
+    function some(mixed $value): Some
     {
-        /* @var Option<T> */
-        return Option::some($value);
+        return new Some($value);
     }
 }
 
 if (!\function_exists('none')) {
     /**
      * No value.
-     *
-     * @return Option<null> None option
      */
-    function none(): Option
+    function none(): None
     {
-        return Option::none();
+        return new None();
     }
 }
