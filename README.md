@@ -91,7 +91,7 @@ echo $result->match(
 > [!TIP]
 >You can use the functions `some()` and `none()` as quick ways to create an `Option` 
 >instance. `some()` is just like `new Some()`, meaning it includes a value, while 
->`none()` is the same as `new None()`, indicating it's empty.
+>`none()` is the same as `new None()`, indicating it is missing a value.
 
 ## Documentation
 
